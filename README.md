@@ -29,7 +29,7 @@ Dependencies{
     }
 
 ## Using Videos
-:-------------------------:
+
 ![Preview](/wwwroot/KullanımVideo/gif.gif)
 
 
