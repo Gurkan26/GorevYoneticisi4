@@ -1,4 +1,4 @@
-﻿
+﻿@using GorevYoneticisi4.Entities
 @{
     ViewData["Title"] = "Index";
 }
@@ -8,18 +8,17 @@
 		<meta name="viewport" content="width-device.width"/>
 		<title>Index</title>
 		<!--Bootstrap CSS-->
-		<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet"/>
+		<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet"/> 
 		<!--Fullcalender plugin-->
 		<link href='~/fullcalendar/lib/main.css' rel='stylesheet' />
 <script src='~/fullcalendar/lib/main.js'></script>
 <script src="~/fullcalendar/lib/locales-all.js"></script>
 <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
 
-<script>
-
+<script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-
+    
+      var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
       headerToolbar: {
         left: 'prev,next today',
@@ -39,27 +38,52 @@
             title: title,
             start: arg.start,
             end: arg.end,
-            allDay: arg.allDay
+            allDay: arg.allDay,
+            
           })
+		 fetch('/home/addRequest',{method:'POST', // Kullanıcıdan alınan verileri fetch ile ilgili metoda yolladık ve ardından ekleme işlemi gerçekleşti.
+                body: JSON.stringify({ 
+                title:title,
+                start:arg.start,
+                end:arg.end
+		
+                 }),
+				headers: { 'Content-Type': 'application/json' },
+    
+         
+         })
+		
+	
         }
         calendar.unselect()
       },
       eventClick: function(arg) {
-        if (confirm('Bu görevi sil etmek istediğine emin misin')) {
-          arg.event.remove()
+		
+        if (confirm('Bu görevi silmek istediğine emin misin')) {
+            // basılan değerin id değerini aldım
+			console.log(JSON.parse((arg.event._def.publicId)))
+
+						arg.event.remove() // ekrandan görevi siler  
+           fetch('/home/Delete',{method:'POST',body: JSON.parse((arg.event._def.publicId)),headers: { 'Content-Type': 'application/json' }})
+		// basılan id değerini ilgili metoda yolluyoruz. Daha sonra silme işlemi gerçekleşiyor.
         }
+       
       },
       editable: true,
+      dayMaxEvents:true,
+      events:"/Home/gorevGetir/"
     });
 
     calendar.render();
   });
-
+  
 </script>
 	</head>
 	<body>
+		
 		<div class="container">
-			<div id="calendar"></div>
+			<div id="calendar"></div>  
+		
 		</div>
 
 
